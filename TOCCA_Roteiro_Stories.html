@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOCCA — Roteiro de Stories</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap');
+
+  :root{
+    --bg: #F7F4F0;
+    --surface: #FFFFFF;
+    --surface-2: #EFE6DC;
+    --surface-3: #E4D2C0;
+    --ink: #1C1C1C;
+    --ink-soft: #6B5643;
+    --ink-faint: #9C8B79;
+    --line: #E4D2C0;
+    --accent: #FF6A00;
+    --accent-ink: #FFFFFF;
+    --shadow: 0 1px 2px rgba(28,20,14,0.04), 0 8px 24px -12px rgba(28,20,14,0.18);
+    /* TOCCA-only accent, used strictly inside TOCCA content cards */
+    --tocca-roxo: #7B3FB5;
+    --tocca-laranja: #4A1D80;
+    --tocca-preto: #2B0F4C;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: #171310; --surface: #211A15; --surface-2: #2B2119; --surface-3: #3E2C23;
+      --ink: #F5EFE8; --ink-soft: #C9B8A6; --ink-faint: #8A7862; --line: #3E2C23;
+      --accent: #FF7A1A; --accent-ink: #1C1C1C;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #171310; --surface: #211A15; --surface-2: #2B2119; --surface-3: #3E2C23;
+    --ink: #F5EFE8; --ink-soft: #C9B8A6; --ink-faint: #8A7862; --line: #3E2C23;
+    --accent: #FF7A1A; --accent-ink: #1C1C1C;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 28px -12px rgba(0,0,0,0.55);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'Poppins',system-ui,-apple-system,sans-serif;
+    font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--accent); color:var(--accent-ink); }
+  .wrap{ max-width:980px; margin:0 auto; padding:0 24px 100px; }
+  .display{ font-family:'Anton',system-ui,sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.005em; text-wrap:balance; }
+
+  /* ---------- TOP NAV ---------- */
+  .topnav{
+    position:sticky; top:0; z-index:50; background:var(--bg);
+    border-bottom:1px solid var(--line); padding:14px 24px;
+    display:flex; justify-content:center;
+  }
+  .topnav-inner{
+    max-width:980px; width:100%; display:flex; align-items:center; justify-content:space-between;
+    gap:16px; flex-wrap:wrap;
+  }
+  .topnav-brand{ font-family:'Anton'; font-size:0.95rem; letter-spacing:0.02em; }
+  .topnav-links{ display:flex; gap:4px; flex-wrap:wrap; }
+  .topnav-links a{
+    font-size:12px; font-weight:600; color:var(--ink-soft); text-decoration:none;
+    padding:7px 12px; border-radius:100px; white-space:nowrap;
+  }
+  .topnav-links a:hover{ background:var(--surface-2); color:var(--ink); }
+
+  /* ---------- HERO ---------- */
+  header.hero{ padding:56px 0 40px; border-bottom:1px solid var(--line); margin-bottom:56px; }
+  .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; margin-bottom:18px; }
+  .eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--accent); }
+  .hero h1{ font-size:clamp(2.2rem, 5.6vw, 3.8rem); line-height:0.98; margin:0 0 20px; }
+  .hero h1 span{ color:var(--accent); }
+  .hero p.lede{ max-width:60ch; font-size:1.05rem; color:var(--ink-soft); margin:0 0 28px; }
+  .chip-row{ display:flex; flex-wrap:wrap; gap:10px; }
+  .chip{ font-size:13px; font-weight:600; padding:8px 14px; border-radius:100px; background:var(--surface-2); color:var(--ink); border:1px solid var(--line); white-space:nowrap; }
+  .chip b{ color:var(--accent); font-weight:700; }
+
+  /* ---------- SECTION SCAFFOLD ---------- */
+  section{ margin-bottom:72px; scroll-margin-top:72px; }
+  .sec-head{ margin-bottom:28px; }
+  .sec-num{ font-family:'Anton'; font-size:13px; color:var(--ink-faint); letter-spacing:0.1em; display:block; margin-bottom:8px; }
+  .sec-head h2{ font-size:clamp(1.4rem,3.2vw,2rem); margin:0 0 10px; line-height:1.08; }
+  .sec-head p{ color:var(--ink-soft); max-width:64ch; margin:0; font-size:0.98rem; }
+  p{ margin:0 0 14px; }
+  .prose p:last-child{ margin-bottom:0; }
+
+  /* ---------- STATS ---------- */
+  .stats-row{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:28px; }
+  @media(min-width:640px){ .stats-row{ grid-template-columns:repeat(4,1fr); } }
+  .stat-box{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:18px; text-align:center; }
+  .stat-box .n{ font-family:'Anton'; font-size:1.8rem; color:var(--accent); }
+  .stat-box .l{ font-size:12px; color:var(--ink-soft); margin-top:4px; }
+
+  /* ---------- DIAGNOSTIC TABLE / REF CARDS ---------- */
+  .diag-grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+  .diag-card{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:22px 24px; box-shadow:var(--shadow); }
+  .diag-card-top{ display:flex; align-items:baseline; gap:10px; margin-bottom:12px; }
+  .diag-badge{ width:22px; height:22px; border-radius:50%; background:#e74c3c; color:#fff; font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .diag-badge.ok{ background:#2e8b57; }
+  .diag-name{ font-weight:700; font-size:1rem; }
+  .diag-split{ display:grid; grid-template-columns:1fr; gap:14px; }
+  @media(min-width:720px){ .diag-split{ grid-template-columns:1fr 1fr; } }
+  .diag-col{ font-size:0.94rem; }
+  .diag-col .lbl{ font-size:11.5px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-faint); display:block; margin-bottom:6px; }
+  .diag-col.apply .lbl{ color:var(--accent); }
+  .diag-col p{ margin:0; color:var(--ink-soft); }
+  .diag-col.apply p{ color:var(--ink); }
+  .diag-positivos{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:22px 24px; margin-top:20px; }
+  .diag-positivos h3{ font-size:1rem; margin:0 0 14px; }
+  .pos-list{ display:grid; grid-template-columns:1fr; gap:10px; }
+  @media(min-width:720px){ .pos-list{ grid-template-columns:1fr 1fr; } }
+  .pos-item{ display:flex; gap:10px; font-size:0.9rem; color:var(--ink-soft); }
+  .pos-item .mark{ flex:none; color:#2e8b57; font-weight:800; }
+
+  /* ---------- BIO COMPARE ---------- */
+  .bio-compare{ display:grid; grid-template-columns:1fr; gap:16px; margin-top:28px; }
+  @media(min-width:720px){ .bio-compare{ grid-template-columns:1fr 1fr; } }
+  .bio-card-box{ border:1px solid var(--line); border-radius:16px; overflow:hidden; background:var(--surface); box-shadow:var(--shadow); display:flex; flex-direction:column; }
+  .bio-card-box h4{ margin:0; padding:14px 18px; font-size:12.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; background:var(--surface-2); color:var(--ink-soft); }
+  .bio-card-box.proposta h4{ background:var(--accent); color:var(--accent-ink); }
+  .bio-img-wrap{ background:#111; display:flex; align-items:center; justify-content:center; }
+  .bio-img-wrap img{ width:100%; display:block; }
+  .bio-proposta-text{ padding:22px; font-size:0.94rem; line-height:1.75; color:var(--ink-soft); flex:1; display:flex; align-items:center; }
+  .bio-proposta-text strong{ color:var(--ink); }
+  .bio-caption{ padding:14px 18px; font-size:12.5px; color:var(--ink-faint); border-top:1px solid var(--line); }
+
+  /* ---------- DESTAQUES (blueprint) ---------- */
+  .blueprint{ display:flex; flex-direction:column; border:1px solid var(--line); border-radius:16px; overflow:hidden; background:var(--surface); }
+  .bp-row{ display:grid; grid-template-columns:56px 1fr; border-bottom:1px solid var(--line); }
+  .bp-row:last-child{ border-bottom:none; }
+  .bp-num{ background:var(--surface-2); display:flex; align-items:center; justify-content:center; font-family:'Anton'; font-size:1.1rem; color:var(--ink-faint); }
+  .bp-content{ padding:16px 20px; }
+  .bp-content .name{ font-weight:700; font-size:0.98rem; margin-bottom:3px; }
+  .bp-content .note{ font-size:0.9rem; color:var(--ink-soft); }
+  .bp-content .note b{ color:var(--accent); font-weight:600; }
+
+  /* ---------- MARCA & PERSONA (TOCCA identity) ---------- */
+  .two-col{ display:grid; grid-template-columns:1fr; gap:18px; }
+  @media(min-width:760px){ .two-col{ grid-template-columns:1fr 1fr; } }
+  .tocca-card{
+    border-radius:18px; padding:30px; color:#fff;
+    background:linear-gradient(135deg, var(--tocca-roxo), var(--tocca-laranja));
+    box-shadow:var(--shadow);
+  }
+  .tocca-card h3{ font-family:'Anton'; text-transform:uppercase; font-size:1.3rem; margin:0 0 20px; letter-spacing:0.01em; }
+  .tocca-card .f{ margin-bottom:18px; }
+  .tocca-card .f:last-child{ margin-bottom:0; }
+  .tocca-card .lbl{ font-size:11px; text-transform:uppercase; letter-spacing:0.08em; opacity:0.85; margin-bottom:6px; }
+  .tocca-card .ct{ font-size:0.94rem; line-height:1.65; }
+  .persona-card{ border:2px solid var(--tocca-preto); border-radius:18px; padding:30px; background:var(--surface); }
+  .persona-card h3{ font-family:'Anton'; text-transform:uppercase; font-size:1.3rem; margin:0 0 20px; color:var(--tocca-preto); }
+  .persona-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+  .persona-item{ background:var(--surface-2); border-radius:8px; padding:12px; }
+  .persona-item .lbl{ font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--tocca-laranja); font-weight:700; margin-bottom:4px; }
+  .persona-item .val{ font-size:0.88rem; color:var(--ink); font-weight:500; }
+  .persona-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+  .persona-tags span{ background:var(--surface-2); padding:6px 11px; border-radius:20px; font-size:12px; color:var(--ink-soft); }
+  .persona-card .fric{ font-size:0.86rem; color:var(--ink-soft); line-height:1.7; }
+  .persona-card .fric b{ color:var(--tocca-roxo); }
+
+  /* ---------- PILLAR GRID (TOCCA) ---------- */
+  .pillar-grid{ display:grid; grid-template-columns:1fr; gap:18px; }
+  @media(min-width:760px){ .pillar-grid{ grid-template-columns:1fr 1fr; } }
+  .pillar-card{ border-radius:18px; overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column; border:1px solid var(--line); background:var(--surface); }
+  .pillar-mock{
+    background:linear-gradient(135deg, var(--tocca-preto), var(--tocca-roxo));
+    color:#fff; padding:22px; min-height:120px; display:flex; flex-direction:column; justify-content:flex-end; position:relative;
+  }
+  .pillar-mock .tag{ position:absolute; top:16px; left:18px; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; opacity:0.7; font-weight:600; }
+  .pillar-mock .emoji{ font-size:2rem; }
+  .pillar-body{ padding:18px 20px 22px; }
+  .pillar-body h4{ margin:0 0 8px; font-size:1.05rem; }
+  .pillar-body p{ font-size:0.9rem; color:var(--ink-soft); margin:0; }
+
+  /* ---------- PLAYBOOK FORMULAS ---------- */
+  .formula{ border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin-bottom:14px; background:var(--surface); }
+  .formula-head{ display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+  .formula-tag{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; background:var(--surface-2); color:var(--ink-soft); padding:4px 10px; border-radius:100px; }
+  .formula-name{ font-weight:700; font-size:1rem; }
+  .formula ul{ margin:0; padding-left:20px; }
+  .formula li{ font-size:0.92rem; color:var(--ink-soft); margin-bottom:5px; }
+  .formula li:last-child{ margin-bottom:0; }
+  .formula li b{ color:var(--ink); font-weight:600; }
+
+  /* ---------- STORY ARC (3 blocos) ---------- */
+  .story-arc{ display:grid; grid-template-columns:1fr; gap:0; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--surface); }
+  .story-block{ display:grid; grid-template-columns:120px 1fr; border-bottom:1px solid var(--line); }
+  .story-block:last-child{ border-bottom:none; }
+  .story-block .sb{ background:var(--surface-2); padding:16px 12px; font-weight:700; font-size:0.82rem; display:flex; align-items:center; text-transform:uppercase; letter-spacing:0.03em; }
+  .story-block .sc{ padding:16px 18px; font-size:0.9rem; color:var(--ink-soft); display:flex; align-items:center; }
+  .story-block .sc b{ color:var(--ink); font-weight:600; }
+
+  /* ---------- PAUTA CALENDAR (57 conteúdos, details/summary) ---------- */
+  .week-group{ margin-bottom:22px; }
+  .week-label{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-faint); margin-bottom:10px; padding-top:14px; border-top:2px solid var(--ink); }
+  .week-label .foco{ font-weight:500; text-transform:none; letter-spacing:0; font-size:0.86rem; color:var(--ink-soft); }
+
+  .post-card{ border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-bottom:10px; background:var(--surface); box-shadow:var(--shadow); }
+  .post-card summary{
+    list-style:none; cursor:pointer; display:grid; grid-template-columns:76px 1fr auto; gap:14px; align-items:center; padding:14px 16px;
+  }
+  .post-card summary::-webkit-details-marker{ display:none; }
+  .post-date2{ text-align:center; }
+  .post-date2 .dow{ font-family:'Anton'; font-size:0.65rem; color:var(--ink-faint); letter-spacing:0.04em; display:block; }
+  .post-date2 .dnum{ font-family:'Anton'; font-size:1.3rem; line-height:1; display:block; }
+  .post-summary-mid{ min-width:0; }
+  .pillar-pill{ display:inline-block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; background:var(--surface-2); color:var(--ink-soft); padding:3px 9px; border-radius:100px; margin-bottom:6px; }
+  .post-title{ font-weight:700; font-size:0.95rem; color:var(--ink); line-height:1.3; }
+  .post-badge{ font-size:10.5px; font-weight:700; text-transform:uppercase; padding:5px 10px; border-radius:100px; white-space:nowrap; background:var(--surface-2); color:var(--ink-soft); }
+  .post-badge.feed{ background:#fde3dd; color:#c0392b; }
+  .post-badge.story{ background:#ecdcf5; color:#7d3c98; }
+  .chevron{ transition:transform .2s; color:var(--ink-faint); font-size:12px; }
+  .post-card[open] .chevron{ transform:rotate(90deg); }
+  .post-detail{ padding:0 18px 20px; border-top:1px solid var(--line); }
+  .post-detail .blk{ margin-top:16px; }
+  .post-detail .blk .lbl{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--accent); margin-bottom:6px; display:block; }
+  .post-detail .blk p{ font-size:0.9rem; color:var(--ink-soft); margin:0; line-height:1.7; }
+  .post-detail .copy-box{ background:var(--surface-2); border-radius:10px; padding:14px 16px; font-size:0.88rem; color:var(--ink); line-height:1.75; white-space:pre-line; }
+  .post-grid2{ display:grid; grid-template-columns:1fr; gap:14px; }
+  @media(min-width:680px){ .post-grid2{ grid-template-columns:1fr 1fr; } }
+
+  /* ---------- CRONOGRAMA RESUMO ---------- */
+  .resumo-grid{ display:grid; grid-template-columns:1fr; gap:10px; }
+  .resumo-row{ display:grid; grid-template-columns:140px 1fr; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--surface); }
+  @media(max-width:600px){ .resumo-row{ grid-template-columns:1fr; } }
+  .resumo-row .rl{ background:var(--surface-2); padding:14px 16px; font-weight:700; font-size:0.82rem; display:flex; align-items:center; }
+  .resumo-row .rr{ padding:14px 16px; font-size:0.86rem; color:var(--ink-soft); }
+  .resumo-row .rr b{ color:var(--ink); }
+
+  /* ---------- CHECKLIST ---------- */
+  .checklist{ display:grid; grid-template-columns:1fr; gap:10px; }
+  @media(min-width:720px){ .checklist{ grid-template-columns:1fr 1fr; } }
+  .check-item{ display:flex; gap:12px; align-items:flex-start; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+  .check-item input[type=checkbox]{ flex:none; width:20px; height:20px; margin-top:1px; accent-color:var(--accent); cursor:pointer; }
+  .check-item label{ margin:0; font-size:0.9rem; color:var(--ink-soft); cursor:pointer; }
+  .check-item label b{ color:var(--ink); }
+  .checklist-group{ margin-bottom:26px; }
+  .checklist-group h4{ font-size:0.85rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-faint); margin:0 0 12px; }
+
+  /* ---------- KPI DIAGRAM ---------- */
+  .kpi-top{ text-align:center; border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--surface-2); font-family:'Anton'; font-size:0.9rem; letter-spacing:0.04em; margin-bottom:18px; }
+  .kpi-split{ display:grid; grid-template-columns:1fr; gap:14px; margin-bottom:24px; }
+  @media(min-width:680px){ .kpi-split{ grid-template-columns:1fr 1fr; } }
+  .kpi-box{ border:1px solid var(--line); border-radius:14px; padding:18px 20px; background:var(--surface); text-align:center; }
+  .kpi-box .t{ font-family:'Anton'; font-size:0.95rem; margin-bottom:8px; }
+  .kpi-box .d{ font-size:0.86rem; color:var(--ink-soft); }
+
+  /* ---------- FOOTER NEXT ---------- */
+  .next{ background:var(--surface-2); border-radius:18px; padding:32px 30px; border:1px solid var(--line); }
+  .next h2{ margin:0 0 14px; font-size:1.25rem; }
+  .next ol{ margin:0; padding-left:22px; }
+  .next li{ margin-bottom:8px; font-size:0.93rem; color:var(--ink-soft); }
+  .next li b{ color:var(--ink); }
+  .note{ margin-top:20px; font-size:0.85rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; }
+
+
+  /* ---------- ROTEIRO / REFERÊNCIAS ---------- */
+  .meta-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+  .meta-pill{ font-size:11.5px; font-weight:600; background:var(--surface-2); color:var(--ink-soft); padding:4px 10px; border-radius:999px; }
+  a.refchip{ font-size:11.5px; font-weight:700; background:var(--accent); color:#fff; padding:4px 10px; border-radius:999px; text-decoration:none; }
+  ol.roteiro{ list-style:none; margin:0; padding:0; counter-reset:rot; }
+  ol.roteiro li{ counter-increment:rot; display:grid; grid-template-columns:minmax(120px,170px) 1fr; gap:12px; padding:10px 0; border-bottom:1px dashed var(--line); font-size:0.88rem; line-height:1.65; }
+  ol.roteiro li:last-child{ border-bottom:0; }
+  ol.roteiro li b{ color:var(--ink); font-weight:600; }
+  ol.roteiro li span{ color:var(--ink-soft); }
+  @media(max-width:620px){ ol.roteiro li{ grid-template-columns:1fr; gap:2px; } }
+  .copy-box.alt{ background:transparent; border:1px dashed var(--line); }
+  .ref-grid{ display:grid; grid-template-columns:1fr; gap:16px; }
+  @media(min-width:760px){ .ref-grid{ grid-template-columns:1fr 1fr; } }
+  .ref-card{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px 22px; }
+  .ref-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .ref-num{ font-family:'Anton'; font-size:0.85rem; letter-spacing:0.04em; color:var(--accent); text-transform:uppercase; }
+  .ref-type{ font-size:11px; font-weight:600; color:var(--ink-faint); text-transform:uppercase; letter-spacing:0.06em; }
+  .ref-card h4{ margin:0 0 4px; font-size:1.02rem; }
+  .ref-acc{ font-size:0.82rem; color:var(--ink-faint); margin-bottom:6px; }
+  .ref-card .blk{ margin-top:12px; }
+  .ref-card .blk .lbl{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--accent); display:block; margin-bottom:4px; }
+  .ref-card .blk p{ font-size:0.88rem; color:var(--ink-soft); margin:0; line-height:1.65; }
+  .ref-foot{ display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-top:14px; padding-top:12px; border-top:1px solid var(--line); font-size:0.8rem; color:var(--ink-faint); }
+  .ref-foot a{ color:var(--accent); font-weight:600; text-decoration:none; }
+  .prof-grid{ display:grid; grid-template-columns:1fr; gap:12px; }
+  @media(min-width:760px){ .prof-grid{ grid-template-columns:1fr 1fr 1fr; } }
+  .prof-card{ display:block; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 18px; text-decoration:none; color:inherit; }
+  .prof-card:hover{ border-color:var(--accent); }
+  .prof-card .ph{ font-weight:700; font-size:0.92rem; color:var(--accent); }
+  .prof-card .ph span{ display:block; font-weight:500; font-size:0.75rem; color:var(--ink-faint); }
+  .prof-card .pn{ font-size:0.82rem; font-weight:600; margin:6px 0 4px; }
+  .prof-card p{ margin:0; font-size:0.82rem; color:var(--ink-soft); line-height:1.6; }
+
+  .visual-note{ background:#2B0F4C; color:#fff; border-radius:16px; padding:20px 24px; margin-bottom:22px; }
+  .visual-note .vn-title{ font-family:'Anton'; letter-spacing:0.03em; font-size:1rem; text-transform:uppercase; margin-bottom:10px; }
+  .visual-note .swatches{ display:flex; gap:8px; margin-bottom:12px; }
+  .visual-note .swatches span{ width:34px; height:34px; border-radius:8px; display:block; }
+  .visual-note ul{ margin:0; padding-left:18px; font-size:0.88rem; line-height:1.7; color:#e7dcf5; }
+  .visual-note li b{ color:#fff; }
+
+  .img-list{ list-style:none; margin:0; padding:0; }
+  .img-list li{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:8px 12px; margin-bottom:6px; background:var(--surface-2); border-radius:10px; font-size:0.86rem; color:var(--ink-soft); }
+  .img-list a{ color:var(--accent); font-weight:600; text-decoration:none; white-space:nowrap; }
+  .img-nota{ font-size:0.84rem; color:var(--ink-soft); margin:8px 0 0; line-height:1.6; }
+  .img-pend{ font-size:0.86rem; background:var(--surface-2); border-left:3px solid var(--accent); padding:10px 14px; border-radius:6px; }
+  @media print{
+    .topnav{ display:none; }
+    .post-detail{ display:block !important; }
+  }
+</style>
+</head>
+<body>
+<div class="topnav">
+  <div class="topnav-inner">
+    <div class="topnav-brand">TOCCA no Evento · Stories</div>
+    <div class="topnav-links"><a href="#d1">Dia 1</a><a href="#d2">Dia 2</a><a href="#d3">Dia 3</a><a href="#d4">Dia 4</a><a href="#d5">Dia 5</a><a href="#d6">Dia 6</a><a href="#d7">Dia 7</a><a href="#d8">Dia 8</a><a href="#d9">Dia 9</a></div>
+  </div>
+</div>
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow"><span class="dot"></span>Roteiro de Stories · elaborado por Bárbara Cordova</div>
+    <h1 class="display">Stories da TOCCA <span>@toccanoevento</span></h1>
+    <p class="lede">Nove dias de Stories feitos com cards de texto, fotos que já existem e adesivos nativos do Instagram. Tudo executável pelo celular em poucos minutos, sem depender do envio de material pelas artistas, em torno do evento de 07/11.</p>
+    <div class="chip-row">
+      <div class="chip"><b>9</b> dias de Stories</div>
+      <div class="chip"><b>31</b> frames com texto pronto</div>
+      <div class="chip"><b>13</b> pontos a confirmar</div>
+      <div class="chip">evento: <b>07/11</b> · Balneário Camboriú</div>
+    </div>
+  </header>
+  <section id="como-usar">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <h2>Como usar este roteiro</h2>
+      <p>Cada dia é um cartão: clique no título para abrir. Dentro dele estão o objetivo, os frames na ordem (horário sugerido, texto para colocar na tela, fundo e adesivo) e uma caixa com todos os textos do dia para copiar. Os avisos “Confirmar antes de postar” indicam informações que a artista, o Fofo ou a organização precisam validar. Trechos entre [colchetes] são dados a preencher.</p>
+    </div>
+    <div class="visual-note">
+      <div class="vn-title">Padrão visual de todas as artes</div>
+      <div class="swatches"><span style="background:#2B0F4C"></span><span style="background:#6A2FA0"></span><span style="background:#B58AE0"></span><span style="background:#fff;border:1px solid #d9cfe6"></span></div>
+      <ul>
+        <li><b>Sempre em tons de roxo:</b> fundos, overlays em fotos e cards.</li>
+        <li><b>Branco só em detalhes:</b> textos, data, local e ícones.</li>
+        <li><b>Stories:</b> deixar livres ~250 px no topo e ~340 px na base (área coberta pela interface).</li>
+      </ul>
+    </div>
+  </section>
+  <section id="roteiro">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <h2>Stories: 9 dias, 31 frames</h2>
+      <p>Nenhum dia depende de vídeo longo, de fala para a câmera ou de material enviado pelas artistas.</p>
+    </div>
+    <div class="week-group">
+      <div class="week-label"><span>SEQUÊNCIA DE STORIES</span><span class="foco">Dia 1 a Dia 9 · datas dos dias 8 e 9 já definidas</span></div>
+      <details class="post-card" id="d1">
+        <summary>
+          <div class="post-date2"><span class="dow">DIA</span><span class="dnum">1</span></div>
+          <div class="post-summary-mid">
+            <span class="pillar-pill">📱 Dia 1</span>
+            <div class="post-title">Stories de acolhimento</div>
+          </div>
+          <span class="post-badge story">Stories</span>
+          <span class="chevron">▶</span>
+        </summary>
+        <div class="post-detail">
+          <div class="meta-row"><span class="meta-pill">5 frames</span></div>
+          <div class="blk"><span class="lbl">Tema</span><p>“Vai sozinho(a) na TOCCA? Leia isso.”</p></div>
+          <div class="blk"><span class="lbl">Objetivo</span><p>Quebrar a barreira do medo e da vergonha e gerar identificação imediata com quem quer ir mas não tem companhia.</p></div>
+          <div class="blk"><span class="lbl">Formato e especificações</span><p>Cards de texto nativo do Instagram (fundo roxo/escuro da identidade) + foto de ambiente com adesivo interativo.</p></div>
+          <div class="blk"><span class="lbl">Roteiro passo a passo</span><ol class="roteiro"><li><b>Frame 1 · O gancho visual</b><span><i>Manhã · 10h</i><br><i>Texto na tela:</i> Uma das mensagens que a gente mais recebe na DM é: “Quero muito ir na TOCCA, mas não tenho companhia. Vale a pena ir sozinho(a)?”<br><i>Fundo:</i> Cor sólida roxa da marca (ou foto escura de edição anterior com baixa opacidade).<br><i>Adesivo:</i> Sem adesivo. Leitura rápida (3 segundos).</span></li><li><b>Frame 2 · O texto de acolhimento da Carol</b><span><i>Manhã · logo em seguida</i><br><i>Texto na tela:</i> A resposta é: SIM. Mais da metade das pessoas que vão na TOCCA chegam sozinhas.<br>Nosso espaço foi pensado exatamente para quem está cansado de ambientes impessoais e quer um lugar seguro, leve e sem julgamentos para conhecer gente na mesma sintonia.<br><i>Fundo:</i> Mesmo fundo roxo ou foto desfocada.</span></li><li><b>Frame 3 · O rolê seguro</b><span><i>Tarde · 14h</i><br><i>Texto na tela:</i> Aqui você conversa com quem faz a arte, toma um drink no bar do Fofo, ouve um som autoral e senta onde quiser.<br>Ninguém fica deslocado na TOCCA.<br><i>Fundo:</i> Foto bonita e espontânea de alguém sorrindo no espaço ou tomando um drink do Fofo em edição anterior.</span></li><li><b>Frame 4 · Engajamento simples (sem comparar artistas)</b><span><i>Tarde · 16h</i><br><i>Texto na tela:</i> Quem aqui já foi em algum evento cultural sozinho(a) e acabou fazendo amizades incríveis?<br><i>Fundo:</i> Fundo escuro.<br><i>Adesivo:</i> Enquete do Instagram: “Já fiz isso e amei!” · “A TOCCA vai ser a 1ª vez”.</span></li><li><b>Frame 5 · Chamada direta e informação prática</b><span><i>Noite · 19h</i><br><i>Texto na tela:</i> Dia 07 de novembro em Balneário Camboriú. Pode vir de peito aberto. A gente tá te esperando! 💜<br><i>Fundo:</i> Card com lettering da data do evento.<br><i>Adesivo:</i> Localização: Balneário Camboriú · Contagem regressiva: TOCCA dos Artistas (07/Nov).</span></li></ol></div>
+          <div class="blk"><span class="lbl">Confirmar antes de postar</span><ul style="margin:0;padding-left:20px;font-size:0.9rem;color:var(--ink-soft);line-height:1.7"><li><b>Frame 2:</b> O dado “mais da metade chega sozinha” precisa vir da própria organização.</li><li><b>Frame 3:</b> Confirmar se haverá música autoral/atração musical no dia.</li></ul></div>
+          <div class="blk"><span class="lbl">Textos do dia para copiar</span><div class="copy-box">FRAME 1 (Manhã · 10h)
+Uma das mensagens que a gente mais recebe na DM é: “Quero muito ir na TOCCA, mas não tenho companhia. Vale a pena ir sozinho(a)?”
+
+FRAME 2 (Manhã · logo em seguida)
+A resposta é: SIM. Mais da metade das pessoas que vão na TOCCA chegam sozinhas.
+Nosso espaço foi pensado exatamente para quem está cansado de ambientes impessoais e quer um lugar seguro, leve e sem julgamentos para conhecer gente na mesma sintonia.
+
+FRAME 3 (Tarde · 14h)
+Aqui você conversa com quem faz a arte, toma um drink no bar do Fofo, ouve um som autoral e senta onde quiser.
+Ninguém fica deslocado na TOCCA.
+
+FRAME 4 (Tarde · 16h)
+Quem aqui já foi em algum evento cultural sozinho(a) e acabou fazendo amizades incríveis?
+
+FRAME 5 (Noite · 19h)
+Dia 07 de novembro em Balneário Camboriú. Pode vir de peito aberto. A gente tá te esperando! 💜</div></div>
+        </div>
+      </details>
+      <details class="post-card" id="d2">
+        <summary>
+          <div class="post-date2"><span class="dow">DIA</span><span class="dnum">2</span></div>
+          <div class="post-summary-mid">
+            <span class="pillar-pill">📱 Dia 2</span>
+            <div class="post-title">Curiosidade de técnica 1 · Gravação em vidro</div>
+          </div>
+          <span class="post-badge story">Stories</span>
+          <span class="chevron">▶</span>
+        </summary>
+        <div class="post-detail">
+          <div class="meta-row"><span class="meta-pill">4 frames</span></div>
+          <div class="blk"><span class="lbl">Tema</span><p>O que é engraving e gravação à mão em espelhos (@paulalana.art / @espelhostatuados)</p></div>
+          <div class="blk"><span class="lbl">Objetivo</span><p>Gerar curiosidade sobre processos manuais e valorizar o trabalho autoral, sem depender de novas falas da artista.</p></div>
+          <div class="blk"><span class="lbl">Formato e especificações</span><p>Cards de texto nativo + fotos já existentes.</p></div>
+          <div class="blk"><span class="lbl">Roteiro passo a passo</span><ol class="roteiro"><li><b>Frame 1 · O gancho de curiosidade</b><span><i>Manhã · 10h</i><br><i>Texto na tela:</i> Você já viu uma peça de vidro ser “tatuada” à mão?<br><i>Fundo:</i> Cor sólida roxa da marca (ou foto escura com baixa opacidade).</span></li><li><b>Frame 2 · A explicação rápida</b><span><i>Manhã · logo em seguida</i><br><i>Texto na tela:</i> A técnica se chama engraving. Não é adesivo nem impressão: o desenho é gravado direto no vidro usando brocas de diamante. Uma vez feito, dura para sempre.<br><i>Fundo:</i> Foto estática em close de um detalhe de espelho já gravado.</span></li><li><b>Frame 3 · Vitrine sem pressão</b><span><i>Tarde · 15h</i><br><i>Texto na tela:</i> A @paulalana.art vai estar na TOCCA dia 07/11 com suas peças do projeto @espelhostatuados. Dá uma olhada no perfil dela pra conhecer.<br><i>Fundo:</i> Foto do trabalho da Paula Lana.</span></li><li><b>Frame 4 · Enquete simples de estilo</b><span><i>Noite · 19h</i><br><i>Texto na tela:</i> Você prefere arte autoral na parede ou em objetos do dia a dia?<br><i>Fundo:</i> Fundo roxo.<br><i>Adesivo:</i> Enquete: “Na parede em quadros” · “Em objetos e espelhos”.</span></li></ol></div>
+          <div class="blk"><span class="lbl">Confirmar antes de postar</span><ul style="margin:0;padding-left:20px;font-size:0.9rem;color:var(--ink-soft);line-height:1.7"><li><b>Frame 2:</b> A Paula confirma a ferramenta usada e se o traço é totalmente permanente.</li></ul></div>
+          <div class="blk"><span class="lbl">Textos do dia para copiar</span><div class="copy-box">FRAME 1 (Manhã · 10h)
+Você já viu uma peça de vidro ser “tatuada” à mão?
+
+FRAME 2 (Manhã · logo em seguida)
+A técnica se chama engraving. Não é adesivo nem impressão: o desenho é gravado direto no vidro usando brocas de diamante. Uma vez feito, dura para sempre.
+
+FRAME 3 (Tarde · 15h)
+A @paulalana.art vai estar na TOCCA dia 07/11 com suas peças do projeto @espelhostatuados. Dá uma olhada no perfil dela pra conhecer.
+
+FRAME 4 (Noite · 19h)
+Você prefere arte autoral na parede ou em objetos do dia a dia?</div></div>
+        </div>
+      </details>
+      <details class="post-card" id="d3">
+        <summary>
+          <div class="post-date2"><span class="dow">DIA</span><span class="dnum">3</span></div>
+          <div class="post-summary-mid">
+            <span class="pillar-pill">📱 Dia 3</span>
+            <div class="post-title">O estilo de vida da persona · enquetes do rolê</div>
+          </div>
+          <span class="post-badge story">Stories</span>
+          <span class="chevron">▶</span>
+        </summary>
+        <div class="post-detail">
+          <div class="meta-row"><span class="meta-pill">3 frames</span></div>
+          <div class="blk"><span class="lbl">Tema</span><p>Como você curte um evento cultural em Balneário Camboriú?</p></div>
+          <div class="blk"><span class="lbl">Objetivo</span><p>Aquecer o algoritmo com enquetes sobre hábitos e gostos da comunidade, sem envolver disputas.</p></div>
+          <div class="blk"><span class="lbl">Formato e especificações</span><p>Cards de texto nativo + foto do espaço.</p></div>
+          <div class="blk"><span class="lbl">Roteiro passo a passo</span><ol class="roteiro"><li><b>Frame 1 · Pergunta inicial</b><span><i>Manhã · 11h</i><br><i>Texto na tela:</i> Qual é o seu programa perfeito de fim de tarde em BC?<br><i>Fundo:</i> Fundo escuro/roxo.<br><i>Adesivo:</i> Enquete: “Café + feirinha autoral” · “Praia + rolê cultural”.</span></li><li><b>Frame 2 · O clima da TOCCA</b><span><i>Tarde · 14h</i><br><i>Texto na tela:</i> A ideia da TOCCA é juntar tudo num lugar só: sentar, tomar um drink, ouvir música autoral e conhecer quem faz arte na nossa região.<br><i>Fundo:</i> Foto do público descontraído ou do espaço da edição anterior.</span></li><li><b>Frame 3 · Caixinha de conexão</b><span><i>Tarde · 16h</i><br><i>Texto na tela:</i> O que não pode faltar na sua playlist quando você sai de casa?<br><i>Fundo:</i> Foto aconchegante do espaço.<br><i>Adesivo:</i> Caixinha de perguntas para o público indicar músicas e estilos.</span></li></ol></div>
+          <div class="blk"><span class="lbl">Confirmar antes de postar</span><ul style="margin:0;padding-left:20px;font-size:0.9rem;color:var(--ink-soft);line-height:1.7"><li><b>Frame 2:</b> Confirmar a música/atração musical do dia.</li></ul></div>
+          <div class="blk"><span class="lbl">Textos do dia para copiar</span><div class="copy-box">FRAME 1 (Manhã · 11h)
+Qual é o seu programa perfeito de fim de tarde em BC?
+
+FRAME 2 (Tarde · 14h)
+A ideia da TOCCA é juntar tudo num lugar só: sentar, tomar um drink, ouvir música autoral e conhecer quem faz arte na nossa região.
+
+FRAME 3 (Tarde · 16h)
+O que não pode faltar na sua playlist quando você sai de casa?</div></div>
+        </div>
+      </details>
+      <details class="post-card" id="d4">
+        <summary>
+          <div class="post-date2"><span class="dow">DIA</span><span class="dnum">4</span></div>
+          <div class="post-summary-mid">
+            <span class="pillar-pill">📱 Dia 4</span>
+            <div class="post-title">Curiosidade de técnica 2 · O realismo a lápis</div>
+          </div>
+          <span class="post-badge story">Stories</span>
+          <span class="chevron">▶</span>
+        </summary>
+        <div class="post-detail">
+          <div class="meta-row"><span class="meta-pill">3 frames</span></div>
+          <div class="blk"><span class="lbl">Tema</span><p>A precisão do grafite e do desenho realista (@loremafalda)</p></div>
+          <div class="blk"><span class="lbl">Objetivo</span><p>Mostrar o valor do tempo e da paciência na arte manual.</p></div>
+          <div class="blk"><span class="lbl">Formato e especificações</span><p>Cards de texto nativo + fotos da artista.</p></div>
+          <div class="blk"><span class="lbl">Roteiro passo a passo</span><ol class="roteiro"><li><b>Frame 1 · O gancho visual</b><span><i>Manhã · 10h</i><br><i>Texto na tela:</i> Quantas horas você acha que leva para fazer um sombreado realista a lápis?<br><i>Fundo:</i> Foto em close de um sombreado a lápis feito pela Loreane.<br><i>Adesivo:</i> Quiz: “De 2 a 5 horas” · “Mais de 15 horas” (correta: mais de 15 horas).</span></li><li><b>Frame 2 · A realidade do processo</b><span><i>Manhã · logo em seguida</i><br><i>Texto na tela:</i> O desenho realista exige camadas e camadas de grafite com diferentes graduações para dar a ilusão de textura e profundidade. É um exercício absoluto de paciência.<br><i>Fundo:</i> Fundo escuro.</span></li><li><b>Frame 3 · Apresentação da artista</b><span><i>Tarde · 15h</i><br><i>Texto na tela:</i> A @loremafalda é psicóloga, professora e encontra no lápis o seu refúgio criativo. As obras dela vão estar expostas no dia 07/11.<br><i>Fundo:</i> Foto de uma obra da artista.</span></li></ol></div>
+          <div class="blk"><span class="lbl">Confirmar antes de postar</span><ul style="margin:0;padding-left:20px;font-size:0.9rem;color:var(--ink-soft);line-height:1.7"><li><b>Frame 1:</b> A Loreane confirma o tempo médio de um desenho.</li><li><b>Frame 3:</b> Confirmar com a Loreane quais dados pessoais e profissionais ela autoriza citar.</li></ul></div>
+          <div class="blk"><span class="lbl">Textos do dia para copiar</span><div class="copy-box">FRAME 1 (Manhã · 10h)
+Quantas horas você acha que leva para fazer um sombreado realista a lápis?
+
+FRAME 2 (Manhã · logo em seguida)
+O desenho realista exige camadas e camadas de grafite com diferentes graduações para dar a ilusão de textura e profundidade. É um exercício absoluto de paciência.
+
+FRAME 3 (Tarde · 15h)
+A @loremafalda é psicóloga, professora e encontra no lápis o seu refúgio criativo. As obras dela vão estar expostas no dia 07/11.</div></div>
+        </div>
+      </details>
+      <details class="post-card" id="d5">
+        <summary>
+          <div class="post-date2"><span class="dow">DIA</span><span class="dnum">5</span></div>
+          <div class="post-summary-mid">
+            <span class="pillar-pill">📱 Dia 5</span>
+            <div class="post-title">O bar do Fofo e a convivência</div>
+          </div>
+          <span class="post-badge story">Stories</span>
+          <span class="chevron">▶</span>
+        </summary>
+        <div class="post-detail">
+          <div class="meta-row"><span class="meta-pill">3 frames</span></div>
+          <div class="blk"><span class="lbl">Tema</span><p>O que vai ter para beber e beliscar?</p></div>
+          <div class="blk"><span class="lbl">Objetivo</span><p>Informar sobre a parte gastronômica/bar de forma acolhedora, deixando claro que há opções para quem não bebe álcool.</p></div>
+          <div class="blk"><span class="lbl">Formato e especificações</span><p>Cards de texto nativo + foto de drinks ou do balcão.</p></div>
+          <div class="blk"><span class="lbl">Roteiro passo a passo</span><ol class="roteiro"><li><b>Frame 1 · Quebrando dúvidas comuns</b><span><i>Manhã · 11h</i><br><i>Texto na tela:</i> Rolê cultural também pede algo gostoso para beber e beliscar! Como vai funcionar o nosso bar no dia 07/11?<br><i>Fundo:</i> Fundo roxo da marca.</span></li><li><b>Frame 2 · Apresentação do bar do Fofo</b><span><i>Tarde · 14h</i><br><i>Texto na tela:</i> O bar do Fofo vai cuidar de tudo: drinks clássicos, cerveja gelada e opções sem álcool muito gostosas para quem quer curtir numa boa.<br><i>Fundo:</i> Foto bonita de drinks/copos ou do balcão.</span></li><li><b>Frame 3 · Enquete gastronômica</b><span><i>Tarde · 16h</i><br><i>Texto na tela:</i> Seu pedido no bar da TOCCA vai ser:<br><i>Fundo:</i> Fundo roxo.<br><i>Adesivo:</i> Enquete: “Drink com álcool / gelado” · “Opção leve e sem álcool”.</span></li></ol></div>
+          <div class="blk"><span class="lbl">Confirmar antes de postar</span><ul style="margin:0;padding-left:20px;font-size:0.9rem;color:var(--ink-soft);line-height:1.7"><li><b>Frame 2:</b> Confirmar com o Fofo o cardápio (drinks, cerveja, opções sem álcool e comida).</li></ul></div>
+          <div class="blk"><span class="lbl">Textos do dia para copiar</span><div class="copy-box">FRAME 1 (Manhã · 11h)
+Rolê cultural também pede algo gostoso para beber e beliscar! Como vai funcionar o nosso bar no dia 07/11?
+
+FRAME 2 (Tarde · 14h)
+O bar do Fofo vai cuidar de tudo: drinks clássicos, cerveja gelada e opções sem álcool muito gostosas para quem quer curtir numa boa.
+
+FRAME 3 (Tarde · 16h)
+Seu pedido no bar da TOCCA vai ser:</div></div>
+        </div>
+      </details>
+      <details class="post-card" id="d6">
+        <summary>
+          <div class="post-date2"><span class="dow">DIA</span><span class="dnum">6</span></div>
+          <div class="post-summary-mid">
+            <span class="pillar-pill">📱 Dia 6</span>
+            <div class="post-title">Curiosidade de técnica 3 · Rituais e velas veganas</div>
+          </div>
+          <span class="post-badge story">Stories</span>
+          <span class="chevron">▶</span>
+        </summary>
+        <div class="post-detail">
+          <div class="meta-row"><span class="meta-pill">3 frames</span></div>
+          <div class="blk"><span class="lbl">Tema</span><p>Como fazer uma vela aromática artesanal durar mais (@calmovelas.br)</p></div>
+          <div class="blk"><span class="lbl">Objetivo</span><p>Entregar uma dica útil de autocuidado que educa o público sobre produtos conscientes.</p></div>
+          <div class="blk"><span class="lbl">Formato e especificações</span><p>Cards de texto nativo + fotos da Calmô.</p></div>
+          <div class="blk"><span class="lbl">Roteiro passo a passo</span><ol class="roteiro"><li><b>Frame 1 · A dica prática</b><span><i>Manhã · 10h</i><br><i>Texto na tela:</i> Dica de ouro que quase ninguém sabe sobre velas aromáticas de cera vegetal 👇<br><i>Fundo:</i> Foto estática da vela da Calmô acesa.</span></li><li><b>Frame 2 · O truque</b><span><i>Manhã · logo em seguida</i><br><i>Texto na tela:</i> Na primeira vez que acender, sempre espere a cera derreter até a borda do vidro. Isso evita que ela forme um “túnel” e faz sua vela durar o dobro do tempo!<br><i>Fundo:</i> Foto em detalhe da queima uniforme da cera.</span></li><li><b>Frame 3 · Conexão com o evento</b><span><i>Tarde · 15h</i><br><i>Texto na tela:</i> A Maryellin da @calmovelas.br produz velas 100% veganas e artesanais aqui na região. Ela vai estar no evento com todos os aromas para você escolher o seu dia 07/11.<br><i>Fundo:</i> Foto dos produtos Calmô.</span></li></ol></div>
+          <div class="blk"><span class="lbl">Confirmar antes de postar</span><ul style="margin:0;padding-left:20px;font-size:0.9rem;color:var(--ink-soft);line-height:1.7"><li><b>Frame 1:</b> A Maryellin confirma o tipo de cera.</li><li><b>Frame 2:</b> A Maryellin confirma a dica e o “dobro do tempo”.</li></ul></div>
+          <div class="blk"><span class="lbl">Textos do dia para copiar</span><div class="copy-box">FRAME 1 (Manhã · 10h)
+Dica de ouro que quase ninguém sabe sobre velas aromáticas de cera vegetal 👇
+
+FRAME 2 (Manhã · logo em seguida)
+Na primeira vez que acender, sempre espere a cera derreter até a borda do vidro. Isso evita que ela forme um “túnel” e faz sua vela durar o dobro do tempo!
+
+FRAME 3 (Tarde · 15h)
+A Maryellin da @calmovelas.br produz velas 100% veganas e artesanais aqui na região. Ela vai estar no evento com todos os aromas para você escolher o seu dia 07/11.</div></div>
+        </div>
+      </details>
+      <details class="post-card" id="d7">
+        <summary>
+          <div class="post-date2"><span class="dow">DIA</span><span class="dnum">7</span></div>
+          <div class="post-summary-mid">
+            <span class="pillar-pill">📱 Dia 7</span>
+            <div class="post-title">FAQ de respostas práticas (direto da Carol)</div>
+          </div>
+          <span class="post-badge story">Stories</span>
+          <span class="chevron">▶</span>
+        </summary>
+        <div class="post-detail">
+          <div class="meta-row"><span class="meta-pill">4 frames</span></div>
+          <div class="blk"><span class="lbl">Tema</span><p>Tudo o que você precisa saber antes de ir</p></div>
+          <div class="blk"><span class="lbl">Objetivo</span><p>Tirar as dúvidas mais frequentes de quem ainda está indeciso, reduzindo perguntas repetitivas no direct.</p></div>
+          <div class="blk"><span class="lbl">Formato e especificações</span><p>Cards de texto nativo na paleta da marca.</p></div>
+          <div class="blk"><span class="lbl">Roteiro passo a passo</span><ol class="roteiro"><li><b>Frame 1 · Abertura do FAQ</b><span><i>Manhã · 10h</i><br><i>Texto na tela:</i> Respondendo as 4 dúvidas mais frequentes sobre a TOCCA dos Artistas (07/11) 👇<br><i>Fundo:</i> Fundo roxo sólido.</span></li><li><b>Frame 2 · Perguntas 1 e 2</b><span><i>Manhã</i><br><i>Texto na tela:</i> 🐶 Pode levar pet? SIM! Nosso ambiente é pet friendly.<br>🎟️ Tem que pagar entrada? NÃO, o acesso à feira e às atrações é gratuito e aberto à comunidade.<br><i>Fundo:</i> Fundo roxo.</span></li><li><b>Frame 3 · Perguntas 3 e 4</b><span><i>Tarde</i><br><i>Texto na tela:</i> 🚗 Onde estacionar? O local conta com vagas nas ruas próximas, mas recomendamos vir de transporte por app se puder.<br>💳 Aceita cartão/Pix? Todos os feirantes aceitam Pix e a maioria aceita cartão!<br><i>Fundo:</i> Fundo roxo.</span></li><li><b>Frame 4 · Dúvida final</b><span><i>Noite</i><br><i>Texto na tela:</i> Ficou com alguma outra dúvida sobre o dia 07? Deixa aqui que a gente responde!<br><i>Fundo:</i> Fundo roxo.<br><i>Adesivo:</i> Caixinha de perguntas.</span></li></ol></div>
+          <div class="blk"><span class="lbl">Confirmar antes de postar</span><ul style="margin:0;padding-left:20px;font-size:0.9rem;color:var(--ink-soft);line-height:1.7"><li><b>Frame 2:</b> Confirmar: pets permitidos e entrada gratuita.</li><li><b>Frame 3:</b> Confirmar: estacionamento e formas de pagamento de cada artista.</li></ul></div>
+          <div class="blk"><span class="lbl">Textos do dia para copiar</span><div class="copy-box">FRAME 1 (Manhã · 10h)
+Respondendo as 4 dúvidas mais frequentes sobre a TOCCA dos Artistas (07/11) 👇
+
+FRAME 2 (Manhã)
+🐶 Pode levar pet? SIM! Nosso ambiente é pet friendly.
+🎟️ Tem que pagar entrada? NÃO, o acesso à feira e às atrações é gratuito e aberto à comunidade.
+
+FRAME 3 (Tarde)
+🚗 Onde estacionar? O local conta com vagas nas ruas próximas, mas recomendamos vir de transporte por app se puder.
+💳 Aceita cartão/Pix? Todos os feirantes aceitam Pix e a maioria aceita cartão!
+
+FRAME 4 (Noite)
+Ficou com alguma outra dúvida sobre o dia 07? Deixa aqui que a gente responde!</div></div>
+        </div>
+      </details>
+      <details class="post-card" id="d8">
+        <summary>
+          <div class="post-date2"><span class="dow">QUA</span><span class="dnum">04</span></div>
+          <div class="post-summary-mid">
+            <span class="pillar-pill">📱 Dia 8</span>
+            <div class="post-title">Contagem regressiva e mapa · faltam 3 dias</div>
+          </div>
+          <span class="post-badge story">Stories</span>
+          <span class="chevron">▶</span>
+        </summary>
+        <div class="post-detail">
+          <div class="meta-row"><span class="meta-pill">3 frames</span><span class="meta-pill">04/11 · quarta</span></div>
+          <div class="blk"><span class="lbl">Tema</span><p>Urgência leve e localização exata</p></div>
+          <div class="blk"><span class="lbl">Objetivo</span><p>Ativar o lembrete mental do evento e fixar o local na cabeça do público.</p></div>
+          <div class="blk"><span class="lbl">Formato e especificações</span><p>Cards de texto nativo + adesivos.</p></div>
+          <div class="blk"><span class="lbl">Roteiro passo a passo</span><ol class="roteiro"><li><b>Frame 1 · Contagem regressiva</b><span><i>Manhã · 11h</i><br><i>Texto na tela:</i> FALTAM 3 DIAS para a TOCCA dos Artistas!<br><i>Fundo:</i> Arte de contagem regressiva da marca.<br><i>Adesivo:</i> Contagem regressiva do Instagram (07 de novembro).</span></li><li><b>Frame 2 · Como chegar</b><span><i>Tarde · 15h</i><br><i>Texto na tela:</i> Já salva o endereço no seu app de transporte para não se perder na quinta-feira.<br><i>Fundo:</i> Card simples com o nome do espaço e um ponto de referência na cidade.<br><i>Adesivo:</i> Localização: Balneário Camboriú.</span></li><li><b>Frame 3 · Chamada de compartilhamento</b><span><i>Noite · 19h</i><br><i>Texto na tela:</i> Manda esse Story para quem vai ser sua companhia (ou te encontrar por lá) no dia 07/11! 💜<br><i>Fundo:</i> Fundo roxo.</span></li></ol></div>
+          <div class="blk"><span class="lbl">Confirmar antes de postar</span><ul style="margin:0;padding-left:20px;font-size:0.9rem;color:var(--ink-soft);line-height:1.7"><li><b>Frame 2:</b> 07/11/2026 cai num sábado: ajustar o dia da semana no texto. Incluir o endereço do espaço.</li></ul></div>
+          <div class="blk"><span class="lbl">Textos do dia para copiar</span><div class="copy-box">FRAME 1 (Manhã · 11h)
+FALTAM 3 DIAS para a TOCCA dos Artistas!
+
+FRAME 2 (Tarde · 15h)
+Já salva o endereço no seu app de transporte para não se perder na quinta-feira.
+
+FRAME 3 (Noite · 19h)
+Manda esse Story para quem vai ser sua companhia (ou te encontrar por lá) no dia 07/11! 💜</div></div>
+        </div>
+      </details>
+      <details class="post-card" id="d9">
+        <summary>
+          <div class="post-date2"><span class="dow">SEX</span><span class="dnum">06</span></div>
+          <div class="post-summary-mid">
+            <span class="pillar-pill">📱 Dia 9</span>
+            <div class="post-title">Véspera do evento</div>
+          </div>
+          <span class="post-badge story">Stories</span>
+          <span class="chevron">▶</span>
+        </summary>
+        <div class="post-detail">
+          <div class="meta-row"><span class="meta-pill">3 frames</span><span class="meta-pill">06/11 · sexta</span></div>
+          <div class="blk"><span class="lbl">Tema</span><p>O clima de quase tudo pronto</p></div>
+          <div class="blk"><span class="lbl">Objetivo</span><p>Mostrar movimento real sem a Carol precisar se expor em vídeo longo ou falar para a câmera.</p></div>
+          <div class="blk"><span class="lbl">Formato e especificações</span><p>Fotos estáticas + cards de texto nativo.</p></div>
+          <div class="blk"><span class="lbl">Roteiro passo a passo</span><ol class="roteiro"><li><b>Frame 1 · A preparação silenciosa</b><span><i>Tarde · 14h</i><br><i>Texto na tela:</i> É AMANHÃ. O espaço está quase pronto para receber cada um de vocês a partir das [Horário].<br><i>Fundo:</i> Foto estática da porta do local, de uma mesa sendo arrumada ou das luzes sendo testadas.</span></li><li><b>Frame 2 · Recado de acolhimento</b><span><i>Fim de tarde · 17h</i><br><i>Texto na tela:</i> Venha com roupa confortável, coração aberto para prestigiar quem faz arte de verdade e disposição para viver um dia leve.<br><i>Fundo:</i> Fundo roxo da marca.</span></li><li><b>Frame 3 · Chamada final</b><span><i>Noite · 20h</i><br><i>Texto na tela:</i> A gente se vê amanhã na TOCCA dos Artistas! 🎭✨<br><i>Fundo:</i> Card com lettering do evento.<br><i>Adesivo:</i> Contagem regressiva marcando as últimas horas.</span></li></ol></div>
+          <div class="blk"><span class="lbl">Confirmar antes de postar</span><ul style="margin:0;padding-left:20px;font-size:0.9rem;color:var(--ink-soft);line-height:1.7"><li><b>Frame 1:</b> Preencher o horário de abertura.</li></ul></div>
+          <div class="blk"><span class="lbl">Textos do dia para copiar</span><div class="copy-box">FRAME 1 (Tarde · 14h)
+É AMANHÃ. O espaço está quase pronto para receber cada um de vocês a partir das [Horário].
+
+FRAME 2 (Fim de tarde · 17h)
+Venha com roupa confortável, coração aberto para prestigiar quem faz arte de verdade e disposição para viver um dia leve.
+
+FRAME 3 (Noite · 20h)
+A gente se vê amanhã na TOCCA dos Artistas! 🎭✨</div></div>
+        </div>
+      </details>    </div>
+  </section>
+  <div class="next">
+    <h2>Antes de postar</h2>
+    <ol>
+      <li><b>Confirme os pontos em amarelo de cada dia</b> com a artista, o Fofo ou a organização. São os dados que mudam o texto: cardápio, regras do espaço, tempos de produção e horários.</li>
+      <li><b>Separe as fotos de cada dia</b> (detalhes de peças das artistas e ambiente de edições anteriores) antes de começar a montar.</li>
+      <li><b>Monte cada dia em uma única sessão de uns 5 minutos</b>: escolha o fundo roxo, cole o texto e adicione o adesivo indicado.</li>
+    </ol>
+    <div class="note">Documento vivo: ajustes de texto, ordem ou datas podem ser alinhados a qualquer momento.<br>Elaborado por Bárbara Cordova · @barbaracordovamkt</div>
+  </div>
+</div>
+</body>
+</html>
